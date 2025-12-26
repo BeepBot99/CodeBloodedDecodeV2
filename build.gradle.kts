@@ -1,7 +1,8 @@
 plugins {
-	id("dev.frozenmilk.teamcode") version "10.1.1-0.1.3"
+    id("dev.frozenmilk.teamcode") version "11.0.0-1.0.0"
 }
 
 ftc {
-	// use this to easily add more FTC libraries
+    // adds the necessary sdk dependencies
+    sdk.TeamCode()
 }
