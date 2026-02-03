@@ -27,6 +27,7 @@ public class Drivetrain {
         frontRight = robot.hardwareMap.get(DcMotorEx.class, "frontRight");
         backLeft = robot.hardwareMap.get(DcMotorEx.class, "backLeft");
         backRight = robot.hardwareMap.get(DcMotorEx.class, "backRight");
+
         telemetry = robot.telemetry;
     }
 
@@ -39,10 +40,10 @@ public class Drivetrain {
         strafe = signedSquare(strafe);
         turn = signedSquare(turn);
 
-//        double x = strafe * Math.cos(follower.getHeading()) + forward * Math.sin(follower.getHeading());
-//        double y = strafe * -Math.cos(follower.getHeading()) + forward * Math.sin(follower.getHeading());
-        double x = forward;
-        double y = strafe;
+        double x = strafe * Math.cos(follower.getHeading()) + forward * Math.sin(follower.getHeading());
+        double y = strafe * -Math.cos(follower.getHeading()) + forward * Math.sin(follower.getHeading());
+//        double x = forward;
+//        double y = strafe;
         y *= 1.1;
 
         double denominator = Math.max(Math.abs(x) + Math.abs(y) + Math.abs(turn), 1);
@@ -57,12 +58,17 @@ public class Drivetrain {
         return follower.getPose();
     }
 
+    public void setStartingPose(Pose pose) {
+        follower.setStartingPose(pose);
+    }
+
     public Command followPath(PathChain path) {
         return follow(follower, path);
     }
 
     public Command periodic() {
         return infinite(() -> {
+            follower.update();
             telemetry.addData("Current X", follower.getPose().getX());
             telemetry.addData("Current Y", follower.getPose().getY());
             telemetry.addData("Current Heading", follower.getHeading());

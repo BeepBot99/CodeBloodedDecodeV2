@@ -15,10 +15,9 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 @Config
 public class Turret {
     private static final double TICKS_PER_REVOLUTION = 384.5 * 3;
-    public static double positiveVelocityMagnetPosition = 0;
-    public static double negativeVelocityMagnetPosition = 5;
-    public static boolean useMagnet = false;
     public static PIDFCoefficients coefficients = new PIDFCoefficients(0.0112, 0, 0.00047, 0);
+    public static double homedAngle = 0;
+    public static double homingPower = -0.18;
     private final DcMotorEx turretMotor;
     private final Telemetry telemetry;
     private final PIDFController controller = new PIDFController(coefficients);
@@ -26,7 +25,6 @@ public class Turret {
     private double target = 0;
     private double power = 0;
     private Mode mode = Mode.OFF;
-    private boolean magnetActivated = false;
     private double angleOffset = 0;
 
     public Turret(Robot robot) {
@@ -71,20 +69,16 @@ public class Turret {
         this.target = target;
     }
 
+    public void home() {
+        mode = Mode.HOME;
+    }
+
     public Command periodic() {
         return infinite(() -> {
-            if (useMagnet && magnetActivated && !limitSwitch.isPressed()) {
-                if (turretMotor.getVelocity() > 0) {
-                    setAngle(positiveVelocityMagnetPosition);
-                } else {
-                    setAngle(negativeVelocityMagnetPosition);
-                }
-            }
-
             switch (mode) {
                 case POSITION:
                     controller.updateError(target - getAngle());
-                    turretMotor.setPower(controller.run());
+                    turretMotor.setPower(controller.run() * 0.5);
                     break;
                 case POWER:
                     turretMotor.setPower(power);
@@ -92,22 +86,30 @@ public class Turret {
                 case OFF:
                     turretMotor.setPower(0);
                     break;
+                case HOME:
+                    if (limitSwitch.isPressed()) {
+                        turretMotor.setPower(0);
+                        setAngle(homedAngle);
+                        mode = Mode.OFF;
+                    } else {
+                        turretMotor.setPower(homingPower);
+                    }
+                    break;
             }
 
-            telemetry.addData("Turret Angle (Robot-Frame)", getAngle());
+            telemetry.addData("Turret Angle", getAngle());
             telemetry.addData("Turret Target", target);
             telemetry.addData("Turret Power", turretMotor.getPower());
             telemetry.addData("Turret Magnet Activated", limitSwitch.isPressed());
             telemetry.addData("Turret Mode", mode);
             telemetry.addData("Turret Velocity", turretMotor.getVelocity());
-
-            magnetActivated = limitSwitch.isPressed();
         });
     }
 
-    private enum Mode {
+    public enum Mode {
         POSITION,
         POWER,
-        OFF
+        OFF,
+        HOME
     }
 }

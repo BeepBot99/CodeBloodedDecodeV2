@@ -1,5 +1,5 @@
 plugins {
-    id("dev.frozenmilk.teamcode") version "11.1.0-1.1.1"
+    id("dev.frozenmilk.teamcode") version "11.1.0-1.1.2"
     id("dev.frozenmilk.sinister.sloth.load") version "0.2.4"
 }
 
@@ -15,7 +15,7 @@ ftc {
     dairy {
         implementation(Sloth)
         implementation(slothboard)
-//        implementation(ftControl.fullpanels)
+        implementation(ftControl.fullpanels)
     }
 
     pedro {

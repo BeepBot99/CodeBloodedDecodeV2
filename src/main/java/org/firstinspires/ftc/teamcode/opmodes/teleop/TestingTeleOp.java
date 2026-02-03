@@ -20,11 +20,11 @@ public class TestingTeleOp extends RobotOpMode {
 
     @Override
     public void loop() {
-//        robot.drivetrain.arcadeDrive(
-//                -gamepad1.left_stick_y,
-//                gamepad1.left_stick_x,
-//                gamepad1.right_stick_x
-//        );
+        robot.drivetrain.arcadeDrive(
+                -gamepad1.left_stick_y,
+                gamepad1.left_stick_x,
+                gamepad1.right_stick_x
+        );
 
         if (gamepad1.rightTriggerWasPressed()) robot.blocker.unblock();
         if (gamepad1.rightTriggerWasReleased()) robot.blocker.block();
@@ -43,11 +43,10 @@ public class TestingTeleOp extends RobotOpMode {
                 }
             }
             robot.turret.setTarget(turretTarget);
-        } else {
-            robot.turret.off();
         }
 
-        Scheduler.execute();
-        robot.telemetry.update();
+        if (gamepad2.crossWasPressed()) robot.turret.home();
+
+        super.loop();
     }
 }

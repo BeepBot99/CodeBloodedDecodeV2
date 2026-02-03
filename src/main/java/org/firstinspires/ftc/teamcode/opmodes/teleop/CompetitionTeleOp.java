@@ -22,7 +22,6 @@ public class CompetitionTeleOp extends RobotOpMode {
 //
 //        if (gamepad1.triangleWasPressed()) robot.flywheel.toggle();
 
-        Scheduler.execute();
-        robot.telemetry.update();
+        super.loop();
     }
 }
