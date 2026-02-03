@@ -13,6 +13,8 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 public class Drivetrain {
+    private static Pose poseTransfer = new Pose();
+
     private final Follower follower;
     private final DcMotorEx frontLeft;
     private final DcMotorEx frontRight;
@@ -62,6 +64,14 @@ public class Drivetrain {
         follower.setStartingPose(pose);
     }
 
+    public void setPose(Pose pose) {
+        follower.setPose(pose);
+    }
+
+    public void usePreviousStartingPose() {
+        setStartingPose(poseTransfer);
+    }
+
     public Command followPath(PathChain path) {
         return follow(follower, path);
     }
@@ -69,6 +79,8 @@ public class Drivetrain {
     public Command periodic() {
         return infinite(() -> {
             follower.update();
+            poseTransfer = follower.getPose();
+
             telemetry.addData("Current X", follower.getPose().getX());
             telemetry.addData("Current Y", follower.getPose().getY());
             telemetry.addData("Current Heading", follower.getHeading());

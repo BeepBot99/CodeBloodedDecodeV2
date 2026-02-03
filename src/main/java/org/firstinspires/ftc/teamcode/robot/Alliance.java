@@ -1,6 +1,15 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import com.pedropathing.geometry.Pose;
+
 public enum Alliance {
-    RED,
-    BLUE
+    RED(new Pose(140, 140)),
+    BLUE(new Pose(1.5, 140));
+
+    public static Alliance current = Alliance.RED;
+    public final Pose goal;
+
+    Alliance(Pose goal) {
+        this.goal = goal;
+    }
 }

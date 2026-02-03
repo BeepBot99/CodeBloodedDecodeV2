@@ -16,16 +16,16 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 public class Turret {
     private static final double TICKS_PER_REVOLUTION = 384.5 * 3;
     public static PIDFCoefficients coefficients = new PIDFCoefficients(0.0112, 0, 0.00047, 0);
-    public static double homedAngle = 0;
+    public static double homedAngleDegrees = 0;
     public static double homingPower = -0.18;
     private final DcMotorEx turretMotor;
     private final Telemetry telemetry;
     private final PIDFController controller = new PIDFController(coefficients);
     private final TouchSensor limitSwitch;
-    private double target = 0;
+    private double targetDegrees = 0;
     private double power = 0;
     private Mode mode = Mode.OFF;
-    private double angleOffset = 0;
+    private double angleOffsetDegrees = 0;
 
     public Turret(Robot robot) {
         turretMotor = robot.hardwareMap.get(DcMotorEx.class, "turret");
@@ -37,17 +37,16 @@ public class Turret {
         limitSwitch = robot.hardwareMap.get(TouchSensor.class, "turretMagnet");
     }
 
-    private double getRawAngle() {
+    private double getRawAngleDegrees() {
         return turretMotor.getCurrentPosition() / TICKS_PER_REVOLUTION * 360;
-
     }
 
-    private double getAngle() {
-        return getRawAngle() + angleOffset;
+    private double getAngleDegrees() {
+        return getRawAngleDegrees() + angleOffsetDegrees;
     }
 
-    private void setAngle(double angle) {
-        angleOffset = angle - getRawAngle();
+    private void setAngleDegrees(double angle) {
+        angleOffsetDegrees = angle - getRawAngleDegrees();
     }
 
     public void off() {
@@ -60,13 +59,13 @@ public class Turret {
         this.power = power;
     }
 
-    public double getTarget() {
-        return target;
+    public double getTargetDegrees() {
+        return targetDegrees;
     }
 
-    public void setTarget(double target) {
+    public void setTargetDegrees(double targetDegrees) {
         mode = Mode.POSITION;
-        this.target = target;
+        this.targetDegrees = targetDegrees;
     }
 
     public void home() {
@@ -77,7 +76,7 @@ public class Turret {
         return infinite(() -> {
             switch (mode) {
                 case POSITION:
-                    controller.updateError(target - getAngle());
+                    controller.updateError(targetDegrees - getAngleDegrees());
                     turretMotor.setPower(controller.run() * 0.5);
                     break;
                 case POWER:
@@ -89,7 +88,7 @@ public class Turret {
                 case HOME:
                     if (limitSwitch.isPressed()) {
                         turretMotor.setPower(0);
-                        setAngle(homedAngle);
+                        setAngleDegrees(homedAngleDegrees);
                         mode = Mode.OFF;
                     } else {
                         turretMotor.setPower(homingPower);
@@ -97,8 +96,8 @@ public class Turret {
                     break;
             }
 
-            telemetry.addData("Turret Angle", getAngle());
-            telemetry.addData("Turret Target", target);
+            telemetry.addData("Turret Angle", getAngleDegrees());
+            telemetry.addData("Turret Target", targetDegrees);
             telemetry.addData("Turret Power", turretMotor.getPower());
             telemetry.addData("Turret Magnet Activated", limitSwitch.isPressed());
             telemetry.addData("Turret Mode", mode);
