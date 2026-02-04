@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import org.firstinspires.ftc.teamcode.math.TractorBeam;
+import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
 
 @TeleOp(name = "Testing TeleOp", group = "Testing")
@@ -13,7 +15,7 @@ public class TestingTeleOp extends RobotOpMode {
     public void init() {
         super.init();
 
-        robot.drivetrain.usePreviousStartingPose();
+        robot.drivetrain.setStartingPose(new Pose(7.5, 7.6, Math.PI / 2));
     }
 
     @Override
@@ -23,6 +25,8 @@ public class TestingTeleOp extends RobotOpMode {
                 gamepad1.left_stick_x,
                 gamepad1.right_stick_x
         );
+
+        TractorBeam.aimTurret(robot, Alliance.RED);
 
         if (gamepad1.rightTriggerWasPressed()) robot.blocker.unblock();
         if (gamepad1.rightTriggerWasReleased()) robot.blocker.block();
@@ -35,7 +39,7 @@ public class TestingTeleOp extends RobotOpMode {
 
         if (gamepad2.crossWasPressed()) robot.turret.home();
 
-        if (gamepad2.squareWasPressed()) robot.drivetrain.setPose(new Pose(7.5, 7.6));
+        if (gamepad2.squareWasPressed()) robot.drivetrain.setPose(new Pose(7.5, 7.6, Math.PI / 2));
 
         super.loop();
     }

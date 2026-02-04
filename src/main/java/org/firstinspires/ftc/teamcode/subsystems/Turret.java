@@ -15,7 +15,7 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 @Config
 public class Turret {
     private static final double TICKS_PER_REVOLUTION = 384.5 * 3;
-    public static PIDFCoefficients coefficients = new PIDFCoefficients(0.0112, 0, 0.00047, 0);
+    public static PIDFCoefficients coefficients = new PIDFCoefficients(0.06, 0, 0.0013, 0);
     public static double homedAngleDegrees = 0;
     public static double homingPower = -0.18;
     private final DcMotorEx turretMotor;

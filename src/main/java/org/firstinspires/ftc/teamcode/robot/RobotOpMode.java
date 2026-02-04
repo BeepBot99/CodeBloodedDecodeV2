@@ -16,7 +16,6 @@ public abstract class RobotOpMode extends OpMode {
         robot = new Robot(this);
 
         schedule(
-                infinite(() -> TractorBeam.aimTurret(robot, Alliance.current)),
                 robot.drivetrain.periodic(),
                 robot.flywheel.periodic(),
                 robot.turret.periodic(),

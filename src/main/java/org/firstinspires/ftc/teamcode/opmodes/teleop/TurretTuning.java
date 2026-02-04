@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
 @TeleOp(name = "Turret Tuning", group = "Testing")
 @Config
 public class TurretTuning extends RobotOpMode {
+    public static boolean on = false;
     public static double target = 0;
     public static boolean waveEnabled = false;
     public static double wavePeriod = 1;
@@ -17,12 +18,18 @@ public class TurretTuning extends RobotOpMode {
 
     @Override
     public void loop() {
-        if (waveEnabled) {
-            if (timer.seconds() > wavePeriod / 2) {
-                timer.reset();
-                target = robot.turret.getTargetDegrees() == waveLow ? waveHigh : waveLow;
+        if (on) {
+            if (waveEnabled) {
+                if (timer.seconds() > wavePeriod / 2) {
+                    timer.reset();
+                    target = robot.turret.getTargetDegrees() == waveLow ? waveHigh : waveLow;
+                }
             }
+            robot.turret.setTargetDegrees(target);
+        } else {
+            robot.turret.off();
         }
-        robot.turret.setTargetDegrees(target);
+
+        super.loop();
     }
 }
