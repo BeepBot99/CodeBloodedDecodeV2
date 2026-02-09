@@ -11,7 +11,9 @@ import static com.pedropathing.ivy.commands.Commands.*;
 
 @Config
 public class Intake {
-    public static double onPower = -1;
+    public double onPower = -1;
+    public static double normalPower = -1;
+    public static double shootingPower = -0.7;
     public static double offPower = 0;
     public static double reversePower = 1;
     public static double shortReverseTimeMs = 150;

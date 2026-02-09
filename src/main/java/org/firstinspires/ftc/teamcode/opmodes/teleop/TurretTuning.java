@@ -18,6 +18,8 @@ public class TurretTuning extends RobotOpMode {
 
     @Override
     public void loop() {
+        if (gamepad1.crossWasPressed()) robot.turret.home();
+
         if (on) {
             if (waveEnabled) {
                 if (timer.seconds() > wavePeriod / 2) {
@@ -29,6 +31,7 @@ public class TurretTuning extends RobotOpMode {
         } else {
             robot.turret.off();
         }
+
 
         super.loop();
     }

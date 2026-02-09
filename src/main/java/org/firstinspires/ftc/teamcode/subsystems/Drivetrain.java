@@ -4,6 +4,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.paths.PathChain;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -30,6 +31,11 @@ public class Drivetrain {
         backLeft = robot.hardwareMap.get(DcMotorEx.class, "backLeft");
         backRight = robot.hardwareMap.get(DcMotorEx.class, "backRight");
 
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         telemetry = robot.telemetry;
     }
 
@@ -43,9 +49,9 @@ public class Drivetrain {
         turn = signedSquare(turn);
 
         double x = strafe * Math.cos(follower.getHeading()) + forward * Math.sin(follower.getHeading());
-        double y = strafe * -Math.cos(follower.getHeading()) + forward * Math.sin(follower.getHeading());
-//        double x = forward;
-//        double y = strafe;
+        double y = strafe * -Math.sin(follower.getHeading()) + forward * Math.cos(follower.getHeading());
+//        double x = strafe;
+//        double y = forward;
         y *= 1.1;
 
         double denominator = Math.max(Math.abs(x) + Math.abs(y) + Math.abs(turn), 1);

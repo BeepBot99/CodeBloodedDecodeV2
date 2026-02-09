@@ -16,14 +16,13 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 public class Turret {
     private static final double TICKS_PER_REVOLUTION = 384.5 * 3;
     public static PIDFCoefficients coefficients = new PIDFCoefficients(0.06, 0, 0.0013, 0);
-    public static double homedAngleDegrees = 0;
-    public static double homingPower = -0.18;
+    public static double homedAngleDegrees = 145;
+    public static double homingPower = 0.25;
     private final DcMotorEx turretMotor;
     private final Telemetry telemetry;
     private final PIDFController controller = new PIDFController(coefficients);
     private final TouchSensor limitSwitch;
     private double targetDegrees = 0;
-    private double power = 0;
     private Mode mode = Mode.OFF;
     private double angleOffsetDegrees = 0;
 
@@ -50,13 +49,12 @@ public class Turret {
     }
 
     public void off() {
+        if (mode == Mode.HOME) return;
         mode = Mode.OFF;
-        power = 0;
     }
 
-    public void setPower(double power) {
-        mode = Mode.POWER;
-        this.power = power;
+    public void forceOff() {
+        mode = Mode.OFF;
     }
 
     public double getTargetDegrees() {
@@ -64,6 +62,7 @@ public class Turret {
     }
 
     public void setTargetDegrees(double targetDegrees) {
+        if (mode == Mode.HOME) return;
         mode = Mode.POSITION;
         this.targetDegrees = targetDegrees;
     }
@@ -78,9 +77,6 @@ public class Turret {
                 case POSITION:
                     controller.updateError(targetDegrees - getAngleDegrees());
                     turretMotor.setPower(controller.run() * 0.5);
-                    break;
-                case POWER:
-                    turretMotor.setPower(power);
                     break;
                 case OFF:
                     turretMotor.setPower(0);
@@ -107,7 +103,6 @@ public class Turret {
 
     public enum Mode {
         POSITION,
-        POWER,
         OFF,
         HOME
     }

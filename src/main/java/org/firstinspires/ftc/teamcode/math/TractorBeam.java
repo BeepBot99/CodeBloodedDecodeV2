@@ -10,8 +10,7 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 public class TractorBeam {
     public static double maximumAngleDegrees = 145;
 
-    public static void aimTurret(Robot robot, Alliance alliance) {
-        Pose currentPose = robot.drivetrain.getPose();
+    public static void aimTurret(Pose currentPose, Robot robot, Alliance alliance) {
         double targetAngleRadians = Math.atan2(alliance.goal.getY() - currentPose.getY(), alliance.goal.getX() - currentPose.getX());
 
         double turretTargetRadians = AngleUnit.normalizeRadians(targetAngleRadians - currentPose.getHeading());
