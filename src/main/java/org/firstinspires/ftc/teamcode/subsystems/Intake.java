@@ -45,7 +45,7 @@ public class Intake {
     }
 
     public Command toggle() {
-        return conditional(() -> intakeMotor.getPower() == offPower, on(), off());
+        return conditional(() -> mode == Mode.OFF, on(), off());
     }
 
     public void slowDown() {
@@ -71,6 +71,7 @@ public class Intake {
             }
 
             telemetry.addData("Intake Current", intakeMotor.getCurrent(CurrentUnit.MILLIAMPS));
+            telemetry.addData("Intake Velocity", intakeMotor.getVelocity());
         });
     }
 
