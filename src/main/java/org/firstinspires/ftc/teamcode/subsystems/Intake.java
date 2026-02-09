@@ -11,9 +11,10 @@ import static com.pedropathing.ivy.commands.Commands.*;
 
 @Config
 public class Intake {
-    public double onPower = -1;
-    public static double normalPower = -1;
-    public static double shootingPower = -0.7;
+    private boolean slowMode = false;
+    private Mode mode = Mode.OFF;
+    public static double fastPower = -1;
+    public static double slowPower = -0.7;
     public static double offPower = 0;
     public static double reversePower = 1;
     public static double shortReverseTimeMs = 150;
@@ -28,15 +29,15 @@ public class Intake {
     }
 
     public Command on() {
-        return instant(() -> intakeMotor.setPower(onPower)).requiring(intakeMotor);
+        return instant(() -> mode = Mode.ON).requiring(intakeMotor);
     }
 
     public Command off() {
-        return instant(() -> intakeMotor.setPower(offPower)).requiring(intakeMotor);
+        return instant(() -> mode = Mode.OFF).requiring(intakeMotor);
     }
 
     public Command reverse() {
-        return instant(() -> intakeMotor.setPower(reversePower)).requiring(intakeMotor);
+        return instant(() -> mode = Mode.REVERSE).requiring(intakeMotor);
     }
 
     public Command shortReverse() {
@@ -47,9 +48,35 @@ public class Intake {
         return conditional(() -> intakeMotor.getPower() == offPower, on(), off());
     }
 
+    public void slowDown() {
+        slowMode = true;
+    }
+
+    public void speedUp() {
+        slowMode = false;
+    }
+
     public Command periodic() {
         return infinite(() -> {
+            switch (mode) {
+                case ON:
+                    intakeMotor.setPower(slowMode ? slowPower : fastPower);
+                    break;
+                case OFF:
+                    intakeMotor.setPower(offPower);
+                    break;
+                case REVERSE:
+                    intakeMotor.setPower(reversePower);
+                    break;
+            }
+
             telemetry.addData("Intake Current", intakeMotor.getCurrent(CurrentUnit.MILLIAMPS));
         });
+    }
+
+    enum Mode {
+        ON,
+        OFF,
+        REVERSE
     }
 }

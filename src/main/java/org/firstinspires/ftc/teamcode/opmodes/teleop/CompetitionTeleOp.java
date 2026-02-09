@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
 
+// TODO: finish competition teleop for now use testing teleop
 @TeleOp(name = "Competition TeleOp", group = "Competition")
 public class CompetitionTeleOp extends RobotOpMode {
     @Override

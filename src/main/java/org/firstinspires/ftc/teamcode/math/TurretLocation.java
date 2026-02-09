@@ -5,12 +5,12 @@ import com.pedropathing.geometry.Pose;
 
 @Config
 public class TurretLocation {
-    public static double turretOffset = -1.496;
+    public static double turretOffsetInches = -1.496;
 
     public static Pose getTurretPose(Pose robotPose) {
         return new Pose(
-                robotPose.getX() + turretOffset * Math.cos(robotPose.getHeading()),
-                robotPose.getY() + turretOffset * Math.sin(robotPose.getHeading()),
+                robotPose.getX() + turretOffsetInches * Math.cos(robotPose.getHeading()),
+                robotPose.getY() + turretOffsetInches * Math.sin(robotPose.getHeading()),
                 robotPose.getHeading()
         );
     }

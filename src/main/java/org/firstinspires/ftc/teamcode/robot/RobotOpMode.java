@@ -2,10 +2,8 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import org.firstinspires.ftc.teamcode.math.TractorBeam;
 
 import static com.pedropathing.ivy.Scheduler.schedule;
-import static com.pedropathing.ivy.commands.Commands.infinite;
 
 public abstract class RobotOpMode extends OpMode {
     protected Robot robot;
