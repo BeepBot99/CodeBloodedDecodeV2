@@ -36,6 +36,7 @@ public class TestingTeleOp extends RobotOpMode {
             robot.blocker.unblock();
             robot.intake.slowDown();
         }
+
         if (gamepad1.rightTriggerWasReleased()) {
             robot.blocker.block();
             robot.intake.speedUp();
