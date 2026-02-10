@@ -17,10 +17,10 @@ public class Drivetrain {
     private static Pose poseTransfer = new Pose();
 
     private final Follower follower;
-    private final DcMotorEx frontLeft;
-    private final DcMotorEx frontRight;
-    private final DcMotorEx backLeft;
-    private final DcMotorEx backRight;
+    public final DcMotorEx frontLeft;
+    public final DcMotorEx frontRight;
+    public final DcMotorEx backLeft;
+    public final DcMotorEx backRight;
 
     private final Telemetry telemetry;
 

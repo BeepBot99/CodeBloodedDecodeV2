@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.math.TractorBeam;
 import org.firstinspires.ftc.teamcode.math.TurretLocation;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
 
 @TeleOp(name = "Testing TeleOp", group = "Testing")
 @Config
