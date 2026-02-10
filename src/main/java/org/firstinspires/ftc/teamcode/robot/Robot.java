@@ -16,7 +16,6 @@ public class Robot {
     public final Flywheel flywheel;
     public final Blocker blocker;
     public final Turret turret;
-    public final Pto pto;
     public final TapeSensor tapeSensor;
 
     public Robot(OpMode opMode) {
@@ -33,6 +32,5 @@ public class Robot {
         blocker = new Blocker(this);
         turret = new Turret(this);
         tapeSensor = new TapeSensor(this);
-        pto = new Pto(this);
     }
 }
