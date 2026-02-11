@@ -63,7 +63,7 @@ public class TestingTeleOp extends RobotOpMode {
         if (gamepad1.triangleWasPressed()) robot.flywheel.toggle();
 
 //        if (gamepad2.crossWasPressed()) robot.turret.home();
-//        if (gamepad2.triangleWasPressed()) robot.turret.forceOff();
+        if (gamepad2.triangleWasPressed()) robot.turret.forceOff = !robot.turret.forceOff;
 
         if (gamepad2.leftBumperWasPressed()) Alliance.current = Alliance.RED;
         if (gamepad2.rightBumperWasPressed()) Alliance.current = Alliance.BLUE;

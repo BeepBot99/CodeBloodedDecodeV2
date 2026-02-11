@@ -23,6 +23,7 @@ public class Turret {
     private final Telemetry telemetry;
     private final PIDFController controller = new PIDFController(coefficients);
     private final TouchSensor limitSwitch;
+    public boolean forceOff = false;
     private double targetDegrees = 0;
     private Mode mode = Mode.OFF;
     private double angleOffsetDegrees = 0;
@@ -54,10 +55,6 @@ public class Turret {
         mode = Mode.OFF;
     }
 
-    public void forceOff() {
-        mode = Mode.OFF;
-    }
-
     public double getTargetDegrees() {
         return targetDegrees;
     }
@@ -82,23 +79,26 @@ public class Turret {
 
     public Command periodic() {
         return infinite(() -> {
-            switch (mode) {
-                case POSITION:
-                    controller.updateError(targetDegrees - getAngleDegrees());
-                    turretMotor.setPower(controller.run() * 0.5);
-                    break;
-                case OFF:
-                    turretMotor.setPower(0);
-                    break;
-                case HOME:
-                    if (limitSwitch.isPressed()) {
+            if (forceOff) turretMotor.setPower(0);
+            else {
+                switch (mode) {
+                    case POSITION:
+                        controller.updateError(targetDegrees - getAngleDegrees());
+                        turretMotor.setPower(controller.run() * 0.5);
+                        break;
+                    case OFF:
                         turretMotor.setPower(0);
-                        setAngleDegrees(homedAngleDegrees);
-                        mode = Mode.OFF;
-                    } else {
-                        turretMotor.setPower(homingPower);
-                    }
-                    break;
+                        break;
+                    case HOME:
+                        if (limitSwitch.isPressed()) {
+                            turretMotor.setPower(0);
+                            setAngleDegrees(homedAngleDegrees);
+                            mode = Mode.OFF;
+                        } else {
+                            turretMotor.setPower(homingPower);
+                        }
+                        break;
+                }
             }
 
             telemetry.addData("Turret Angle", getAngleDegrees());
@@ -107,6 +107,7 @@ public class Turret {
             telemetry.addData("Turret Magnet Activated", limitSwitch.isPressed());
             telemetry.addData("Turret Mode", mode);
             telemetry.addData("Turret Velocity", turretMotor.getVelocity());
+            telemetry.addData("Turret Forced Off", forceOff ? "Yes" : "No");
         });
     }
 
