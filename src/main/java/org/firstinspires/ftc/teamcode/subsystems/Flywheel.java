@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.math.TurretLocation;
 import org.firstinspires.ftc.teamcode.math.WaveLength;
+import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 import static com.pedropathing.ivy.commands.Commands.infinite;
@@ -14,8 +15,8 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 @Config
 public class Flywheel {
     public static double kP = 0.01;
-    public static double kS = 0.105;
-    public static double kV = 0.000385;
+    public static double kS = 0.065;
+    public static double kV = 0.000365;
     public static int velocityTolerance = 40;
     public static boolean override = false;
     public static double overrideTarget = 1000;
@@ -69,7 +70,7 @@ public class Flywheel {
     public Command periodic() {
         return infinite(() -> {
             if (on) {
-                target = override ? overrideTarget : WaveLength.getVelocityWithInterpolation(TurretLocation.getTurretPose(drivetrain.getPose()));
+                target = override ? overrideTarget : WaveLength.getVelocityWithInterpolation(TurretLocation.getTurretPose(drivetrain.getPose()), Alliance.current);
                 setPower(kP * (target - getVelocity()) + kV * target + kS * Math.signum(target));
             } else {
                 target = 0;

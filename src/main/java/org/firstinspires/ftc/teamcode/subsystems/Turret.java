@@ -15,6 +15,7 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 @Config
 public class Turret {
     private static final double TICKS_PER_REVOLUTION = 384.5 * 3;
+    public static double incrementDegrees = 5;
     public static PIDFCoefficients coefficients = new PIDFCoefficients(0.06, 0, 0.0013, 0);
     public static double homedAngleDegrees = 145;
     public static double homingPower = 0.25;
@@ -69,6 +70,14 @@ public class Turret {
 
     public void home() {
         mode = Mode.HOME;
+    }
+
+    public void moveLeft() {
+        setAngleDegrees(getAngleDegrees() - incrementDegrees);
+    }
+
+    public void moveRight() {
+        setAngleDegrees(getAngleDegrees() + incrementDegrees);
     }
 
     public Command periodic() {

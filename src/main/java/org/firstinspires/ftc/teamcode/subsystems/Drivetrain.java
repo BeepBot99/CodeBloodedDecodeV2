@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.control.PIDFController;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.ivy.Command;
@@ -7,22 +10,28 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 import static com.pedropathing.ivy.commands.Commands.infinite;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
+@Config
 public class Drivetrain {
+    public static PIDFCoefficients headingCoefficients = new PIDFCoefficients(0, 0, 0, 0);
+    public static double gateOpenHeadingDegrees = 45;
     private static Pose poseTransfer = new Pose();
-
-    private final Follower follower;
     public final DcMotorEx frontLeft;
     public final DcMotorEx frontRight;
     public final DcMotorEx backLeft;
     public final DcMotorEx backRight;
-
+    private final Follower follower;
     private final Telemetry telemetry;
+    private final PIDFController headingController = new PIDFController(headingCoefficients);
+    private boolean lockHeading = false;
+    private double headingTargetRadians = 0;
 
     public Drivetrain(Robot robot) {
         follower = Constants.createFollower(robot.hardwareMap);
@@ -43,13 +52,48 @@ public class Drivetrain {
         return Math.signum(raw) * Math.pow(raw, 2);
     }
 
-    public void arcadeDrive(double forward, double strafe, double turn) {
+    public static void localize(Pose pose) {
+        poseTransfer = pose;
+    }
+
+    public void lockHeading() {
+        if (!lockHeading) {
+            lockHeading = true;
+            headingTargetRadians = follower.getHeading();
+        }
+    }
+
+    public void gateHeading(Alliance alliance) {
+        lockHeading = true;
+        if (alliance == Alliance.RED) {
+            headingTargetRadians = Math.toRadians(gateOpenHeadingDegrees);
+        } else {
+            headingTargetRadians = Math.toRadians(Math.PI - gateOpenHeadingDegrees);
+        }
+    }
+
+    public void unlockHeading() {
+        lockHeading = false;
+    }
+
+    public void arcadeDrive(double forward, double strafe, double turn, Alliance alliance) {
+        double headingRadians = follower.getHeading();
+
         forward = signedSquare(forward);
         strafe = signedSquare(strafe);
-        turn = signedSquare(turn);
 
-        double x = strafe * Math.cos(follower.getHeading()) + forward * Math.sin(follower.getHeading());
-        double y = strafe * -Math.sin(follower.getHeading()) + forward * Math.cos(follower.getHeading());
+        if (lockHeading) {
+            headingController.updateError(AngleUnit.normalizeRadians(headingTargetRadians - headingRadians));
+            turn = -headingController.run();
+        } else {
+            turn = signedSquare(turn);
+        }
+
+
+        if (alliance == Alliance.BLUE) headingRadians += Math.PI;
+
+        double x = strafe * Math.cos(headingRadians) + forward * Math.sin(headingRadians);
+        double y = strafe * -Math.sin(headingRadians) + forward * Math.cos(headingRadians);
 //        double x = strafe;
 //        double y = forward;
         y *= 1.1;
@@ -66,12 +110,12 @@ public class Drivetrain {
         return follower.getPose();
     }
 
-    public void setStartingPose(Pose pose) {
-        follower.setStartingPose(pose);
-    }
-
     public void setPose(Pose pose) {
         follower.setPose(pose);
+    }
+
+    public void setStartingPose(Pose pose) {
+        follower.setStartingPose(pose);
     }
 
     public void usePreviousStartingPose() {
@@ -89,7 +133,7 @@ public class Drivetrain {
 
             telemetry.addData("Current X", follower.getPose().getX());
             telemetry.addData("Current Y", follower.getPose().getY());
-            telemetry.addData("Current Heading", follower.getHeading());
+            telemetry.addData("Current Heading", Math.toDegrees(follower.getHeading()));
         });
     }
 }

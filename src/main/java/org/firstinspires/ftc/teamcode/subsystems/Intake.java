@@ -14,7 +14,7 @@ public class Intake {
     private boolean slowMode = false;
     private Mode mode = Mode.OFF;
     public static double fastPower = -1;
-    public static double slowPower = -0.7;
+    public static double slowPower = -1;
     public static double offPower = 0;
     public static double reversePower = 1;
     public static double shortReverseTimeMs = 150;

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
 
 // TODO: finish competition teleop for now use testing teleop
@@ -11,7 +12,8 @@ public class CompetitionTeleOp extends RobotOpMode {
         robot.drivetrain.arcadeDrive(
                 -gamepad1.left_stick_y,
                 gamepad1.left_stick_x,
-                gamepad1.right_stick_x
+                gamepad1.right_stick_x,
+                Alliance.current
         );
 
         if (gamepad1.rightTriggerWasPressed()) robot.blocker.unblock();
