@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.math.TractorBeam;
 import org.firstinspires.ftc.teamcode.math.TurretLocation;
 import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 
 import static org.firstinspires.ftc.teamcode.math.PoseMirror.mirror;
 
@@ -41,6 +42,12 @@ public class CompetitionTeleOp extends RobotOpMode {
         Pose turretPose = TurretLocation.getTurretPose(robot.drivetrain.getPose());
 
         TractorBeam.aimTurret(turretPose, robot, Alliance.current);
+
+        if (robot.drivetrain.getPose().getY() > 48) {
+            Intake.slowPower = -1;
+        } else {
+            Intake.slowPower = -0.6;
+        }
 
         if (gamepad1.rightTriggerWasPressed()) {
             robot.blocker.unblock();

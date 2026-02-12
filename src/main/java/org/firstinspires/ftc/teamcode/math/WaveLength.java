@@ -9,12 +9,21 @@ import static org.firstinspires.ftc.teamcode.math.PoseMirror.mirror;
 
 public class WaveLength {
     private static final Interpolation2D farInterpolation = new BilinearInterpolation(
-            new double[]{43, 71, 0},
-            new double[]{4, 0},
+            new double[]{43, 71, 100},
+            new double[]{6, 27},
             new double[][]{
-                    {0, 0},
-                    {0, 0},
-                    {0, 0}
+                    {1700, 1635},
+                    {1675, 1520},
+                    {1620, 1520}
+            });
+
+    private static final Interpolation2D farTurretInterpolation = new BilinearInterpolation(
+            new double[]{43, 71, 100},
+            new double[]{6, 27},
+            new double[][]{
+                    {45, 48},
+                    {62, 58},
+                    {76, 72}
             });
 
     private static final Interpolation2D closeInterpolation = new BilinearInterpolation(
@@ -27,7 +36,7 @@ public class WaveLength {
             }
     );
 
-    private static final Interpolation2D closeTurretInterpolationDegrees = new BilinearInterpolation(
+    private static final Interpolation2D closeTurretInterpolation = new BilinearInterpolation(
             new double[]{38, 61, 85},
             new double[]{135.5, 111, 88, 63},
             new double[][]{
@@ -39,12 +48,21 @@ public class WaveLength {
 
     public static double getVelocityWithInterpolation(Pose currentPosition, Alliance alliance) {
         Pose pose = alliance == Alliance.RED ? currentPosition : mirror(currentPosition);
-        return closeInterpolation.interpolate(pose.getX(), pose.getY());
+        if (currentPosition.getY() > 48) {
+            return closeInterpolation.interpolate(pose.getX(), pose.getY());
+        } else {
+            return farInterpolation.interpolate(pose.getX(), pose.getY());
+        }
     }
 
     public static double getAngleWithInterpolation(Pose currentPosition, Alliance alliance) {
         Pose pose = alliance == Alliance.RED ? currentPosition : mirror(currentPosition);
-        double angle =  closeTurretInterpolationDegrees.interpolate(pose.getX(), pose.getY());
+        double angle;
+        if (currentPosition.getY() > 48) {
+            angle = closeTurretInterpolation.interpolate(pose.getX(), pose.getY());
+        } else {
+            angle = farTurretInterpolation.interpolate(pose.getX(), pose.getY());
+        }
         return alliance == Alliance.RED ? angle : 180 - angle;
     }
 }
