@@ -13,8 +13,7 @@ import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
 
 import static com.pedropathing.ivy.Scheduler.schedule;
-import static com.pedropathing.ivy.commands.Commands.instant;
-import static com.pedropathing.ivy.commands.Commands.waitMs;
+import static com.pedropathing.ivy.commands.Commands.*;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static org.firstinspires.ftc.teamcode.math.PoseMirror.mirror;
 
@@ -38,6 +37,8 @@ public class BlueClose15 extends RobotOpMode {
         Alliance.current = Alliance.BLUE;
 
         robot.drivetrain.setStartingPose(transformed(120, 126).withHeading(Math.toRadians(180 - 216)));
+
+        robot.turret.setStartingAngle(0);
 
         paths = new Paths(robot.drivetrain.follower);
     }
@@ -66,6 +67,7 @@ public class BlueClose15 extends RobotOpMode {
                         aimForPath(paths.toFirstShoot),
                         robot.drivetrain.followPath(paths.toFirstShoot),
                         robot.intake.on(),
+                        waitUntil(robot.flywheel::atTarget),
                         shoot(),
                         robot.drivetrain.followPath(paths.middleRowIntake),
                         robot.intake.off(),

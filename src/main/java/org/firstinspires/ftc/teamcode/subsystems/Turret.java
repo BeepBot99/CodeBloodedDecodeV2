@@ -15,6 +15,7 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 @Config
 public class Turret {
     private static final double TICKS_PER_REVOLUTION = 384.5 * 3;
+    private static double angleTransfer = 0;
     public static double incrementDegrees = 5;
     public static PIDFCoefficients coefficients = new PIDFCoefficients(0.06, 0, 0.0013, 0);
     public static double homedAngleDegrees = 145;
@@ -50,6 +51,10 @@ public class Turret {
         angleOffsetDegrees = angle - getRawAngleDegrees();
     }
 
+    public static void localize(double angle) {
+        angleTransfer = angle;
+    }
+
     public void off() {
         if (mode == Mode.HOME) return;
         mode = Mode.OFF;
@@ -77,6 +82,14 @@ public class Turret {
         setAngleDegrees(getAngleDegrees() + incrementDegrees);
     }
 
+    public void setStartingAngle(double angle) {
+        setAngleDegrees(angle);
+    }
+
+    public void usePreviousStartingAngle() {
+        setAngleDegrees(angleTransfer);
+    }
+
     public Command periodic() {
         return infinite(() -> {
             if (forceOff) turretMotor.setPower(0);
@@ -100,6 +113,8 @@ public class Turret {
                         break;
                 }
             }
+
+            angleTransfer = getAngleDegrees();
 
             telemetry.addData("Turret Angle", getAngleDegrees());
             telemetry.addData("Turret Target", targetDegrees);

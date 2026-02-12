@@ -9,8 +9,6 @@ import org.firstinspires.ftc.teamcode.robot.Alliance;
 import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 
-import static org.firstinspires.ftc.teamcode.math.PoseMirror.mirror;
-
 @TeleOp(name = "TeleOp", group = "Competition")
 @Config
 public class CompetitionTeleOp extends RobotOpMode {
@@ -20,6 +18,7 @@ public class CompetitionTeleOp extends RobotOpMode {
         super.init();
 
         robot.drivetrain.usePreviousStartingPose();
+        robot.turret.usePreviousStartingAngle();
     }
 
     @Override
@@ -58,7 +57,6 @@ public class CompetitionTeleOp extends RobotOpMode {
             robot.blocker.block();
             robot.intake.speedUp();
         }
-        if (gamepad2.leftTriggerWasPressed()) robot.blocker.assembly();
 
 //        if (gamepad1.rightBumperWasPressed()) robot.intake.toggle().schedule();
         if (gamepad1.rightBumperWasPressed()) robot.intake.off().schedule();
@@ -67,6 +65,10 @@ public class CompetitionTeleOp extends RobotOpMode {
 
         if (gamepad1.triangleWasPressed()) robot.flywheel.toggle();
 
+        if (gamepad1.squareWasPressed()) robot.drivetrain.gateHeading(Alliance.current);
+
+        if (gamepad2.leftTriggerWasPressed()) robot.blocker.assembly();
+
 //        if (gamepad2.crossWasPressed()) robot.turret.home();
         if (gamepad2.triangleWasPressed()) robot.turret.forceOff = !robot.turret.forceOff;
 
@@ -74,14 +76,13 @@ public class CompetitionTeleOp extends RobotOpMode {
         if (gamepad2.rightBumperWasPressed()) Alliance.current = Alliance.BLUE;
 
         if (gamepad2.crossWasPressed()) robot.drivetrain.setPose(
-                Alliance.current == Alliance.RED ? new Pose(7.5, 7.6, 0) : mirror(new Pose(7.5, 7.6, 0))
+                Alliance.current == Alliance.RED ? new Pose(8.1, 7.5, 0) : new Pose(141.5 - 8.1, 7.5, Math.PI)
         );
 
         if (gamepad2.circleWasPressed()) robot.drivetrain.setPose(robot.drivetrain.getPose().withHeading(
                 Alliance.current == Alliance.RED ? 0 : Math.PI
         ));
 
-        if (gamepad1.squareWasPressed()) robot.drivetrain.gateHeading(Alliance.current);
 
         if (gamepad2.dpadLeftWasPressed()) robot.turret.moveLeft();
         if (gamepad2.dpadRightWasPressed()) robot.turret.moveRight();

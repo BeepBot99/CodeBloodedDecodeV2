@@ -5,6 +5,6 @@ import com.pedropathing.math.MathFunctions;
 
 public class PoseMirror {
     public static Pose mirror(Pose pose) {
-        return new Pose(141.5 - pose.getX(), pose.getY(), MathFunctions.normalizeAngle(Math.PI - pose.getHeading()));
+        return new Pose(141.5 - pose.getX(), pose.getY(), Math.PI - pose.getHeading());
     }
 }

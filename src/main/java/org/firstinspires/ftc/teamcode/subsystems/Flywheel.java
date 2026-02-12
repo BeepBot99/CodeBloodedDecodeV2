@@ -17,7 +17,7 @@ public class Flywheel {
     public static double kP = 0.01;
     public static double kS = 0.065;
     public static double kV = 0.000365;
-    public static int velocityTolerance = 40;
+    public static int velocityTolerance = 25;
     public static boolean override = false;
     public static double overrideTarget = 1000;
     private final DcMotorEx flywheelMotorTop;
