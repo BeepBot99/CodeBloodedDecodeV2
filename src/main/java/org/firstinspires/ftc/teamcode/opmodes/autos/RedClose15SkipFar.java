@@ -16,8 +16,8 @@ import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.commands.Commands.*;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 
-@Autonomous(name = "Red Close 15", group = "Competition")
-public class RedClose15 extends RobotOpMode {
+@Autonomous(name = "Red Close 15 Skip Far", group = "Competition")
+public class RedClose15SkipFar extends RobotOpMode {
     private Paths paths;
 
     private static Pose transformed(double x, double y) {
@@ -73,10 +73,10 @@ public class RedClose15 extends RobotOpMode {
                         robot.drivetrain.followPath(paths.toSecondShoot),
                         robot.intake.on(),
                         shoot(),
-                        robot.drivetrain.followPath(paths.toGateIntake),
+                        robot.drivetrain.followPath(paths.toGateIntake1),
                         waitMs(75),
                         instant(() -> robot.drivetrain.follower.setMaxPower(0.7)),
-                        robot.drivetrain.followPath(paths.awayFromGate),
+                        robot.drivetrain.followPath(paths.awayFromGate1),
                         instant(() -> robot.drivetrain.follower.setMaxPower(1)),
                         waitMs(1250),
                         robot.intake.off(),
@@ -84,17 +84,21 @@ public class RedClose15 extends RobotOpMode {
                         robot.drivetrain.followPath(paths.toThirdShoot),
                         robot.intake.on(),
                         shoot(),
-                        instant(() -> robot.drivetrain.follower.setMaxPower(0.6)),
-                        robot.drivetrain.followPath(paths.firstRowIntake),
+                        robot.drivetrain.followPath(paths.toGateIntake2),
+                        waitMs(75),
+                        instant(() -> robot.drivetrain.follower.setMaxPower(0.7)),
+                        robot.drivetrain.followPath(paths.awayFromGate2),
                         instant(() -> robot.drivetrain.follower.setMaxPower(1)),
+                        waitMs(1250),
                         robot.intake.off(),
                         aimForPath(paths.toFourthShoot),
                         robot.drivetrain.followPath(paths.toFourthShoot),
                         robot.intake.on(),
                         shoot(),
-                        robot.drivetrain.followPath(paths.lastRowIntake),
+                        instant(() -> robot.drivetrain.follower.setMaxPower(0.6)),
+                        robot.drivetrain.followPath(paths.firstRowIntake),
+                        instant(() -> robot.drivetrain.follower.setMaxPower(1)),
                         robot.intake.off(),
-                        instant(() -> robot.flywheel.setTarget(1365)),
                         aimForPath(paths.toFifthShoot),
                         robot.drivetrain.followPath(paths.toFifthShoot),
                         robot.intake.on(),
@@ -118,12 +122,13 @@ public class RedClose15 extends RobotOpMode {
         public final PathChain toFirstShoot;
         public final PathChain middleRowIntake;
         public final PathChain toSecondShoot;
-        public final PathChain toGateIntake;
-        public final PathChain awayFromGate;
+        public final PathChain toGateIntake1;
+        public final PathChain awayFromGate1;
         public final PathChain toThirdShoot;
-        public final PathChain firstRowIntake;
+        public final PathChain toGateIntake2;
+        public final PathChain awayFromGate2;
         public final PathChain toFourthShoot;
-        public final PathChain lastRowIntake;
+        public final PathChain firstRowIntake;
         public final PathChain toFifthShoot;
 
         public Paths(Follower follower) {
@@ -152,7 +157,7 @@ public class RedClose15 extends RobotOpMode {
                     .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(300))
                     .build();
 
-            toGateIntake = follower.pathBuilder()
+            toGateIntake1 = follower.pathBuilder()
                     .addPath(new BezierCurve(
                             transformed(87, 83),
                             transformed(110, 64),
@@ -161,7 +166,7 @@ public class RedClose15 extends RobotOpMode {
                     .setLinearHeadingInterpolation(Math.toRadians(300), Math.toRadians(0))
                     .build();
 
-            awayFromGate = follower.pathBuilder()
+            awayFromGate1 = follower.pathBuilder()
                     .addPath(new BezierCurve(
                             transformed(120, 64.75),
                             transformed(120, 50),
@@ -179,6 +184,33 @@ public class RedClose15 extends RobotOpMode {
                     .setLinearHeadingInterpolation(Math.toRadians(36.5), Math.toRadians(0))
                     .build();
 
+            toGateIntake2 = follower.pathBuilder()
+                    .addPath(new BezierCurve(
+                            transformed(87, 83),
+                            transformed(110, 64),
+                            transformed(120, 64.75)
+                    ))
+                    .setLinearHeadingInterpolation(Math.toRadians(300), Math.toRadians(0))
+                    .build();
+
+            awayFromGate2 = follower.pathBuilder()
+                    .addPath(new BezierCurve(
+                            transformed(120, 64.75),
+                            transformed(120, 50),
+                            transformed(126, 49)
+                    ))
+                    .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(36.5))
+                    .build();
+
+            toFourthShoot = follower.pathBuilder()
+                    .addPath(new BezierCurve(
+                            transformed(126, 49),
+                            transformed(96, 48),
+                            transformed(87, 83)
+                    ))
+                    .setLinearHeadingInterpolation(Math.toRadians(36.5), Math.toRadians(0))
+                    .build();
+
             firstRowIntake = follower.pathBuilder()
                     .addPath(new BezierLine(
                             transformed(87, 83),
@@ -187,29 +219,12 @@ public class RedClose15 extends RobotOpMode {
                     .setConstantHeadingInterpolation(Math.toRadians(0))
                     .build();
 
-            toFourthShoot = follower.pathBuilder()
-                    .addPath(new BezierLine(
-                            transformed(123, 83),
-                            transformed(87, 83)
-                    ))
-                    .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(300))
-                    .build();
-
-            lastRowIntake = follower.pathBuilder()
-                    .addPath(new BezierCurve(
-                            transformed(87, 83),
-                            transformed(85, 35),
-                            transformed(125, 34)
-                    ))
-                    .setTangentHeadingInterpolation()
-                    .build();
-
             toFifthShoot = follower.pathBuilder()
                     .addPath(new BezierLine(
-                            transformed(125, 34),
+                            transformed(123, 83),
                             transformed(84, 103)
                     ))
-                    .setTangentHeadingInterpolation()
+                    .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(300))
                     .build();
         }
     }

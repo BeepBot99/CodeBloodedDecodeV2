@@ -15,17 +15,16 @@ import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
 import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.commands.Commands.*;
 import static com.pedropathing.ivy.groups.Groups.sequential;
-import static org.firstinspires.ftc.teamcode.math.PoseMirror.mirror;
 
-@Autonomous(name = "Blue Close 15", group = "Competition")
-public class BlueClose15 extends RobotOpMode {
+@Autonomous(name = "Red Close 15 Full", group = "Competition")
+public class RedClose15Full extends RobotOpMode {
     private Paths paths;
 
     private static Pose transformed(double x, double y) {
-        return mirror(new Pose(
+        return new Pose(
                 x - 1.5 * Math.cos(Math.toRadians(36)),
                 y - 1.5 * Math.sin(Math.toRadians(36))
-        ));
+        );
     }
 
     @Override
@@ -34,10 +33,9 @@ public class BlueClose15 extends RobotOpMode {
 
         robot.blocker.block();
 
-        Alliance.current = Alliance.BLUE;
+        Alliance.current = Alliance.RED;
 
-        robot.drivetrain.setStartingPose(transformed(120, 126).withHeading(Math.toRadians(180 - 216)));
-
+        robot.drivetrain.setStartingPose(transformed(120, 126).withHeading(Math.toRadians(216)));
         robot.turret.setStartingAngle(0);
 
         paths = new Paths(robot.drivetrain.follower);
@@ -134,7 +132,7 @@ public class BlueClose15 extends RobotOpMode {
                             transformed(120, 126),
                             transformed(87, 83)
                     ))
-                    .setLinearHeadingInterpolation(Math.toRadians(180 - 216), Math.toRadians(180 - 300))
+                    .setLinearHeadingInterpolation(Math.toRadians(216), Math.toRadians(300))
                     .build();
 
             middleRowIntake = follower.pathBuilder()
@@ -143,7 +141,7 @@ public class BlueClose15 extends RobotOpMode {
                             transformed(90, 58),
                             transformed(125, 58)
                     ))
-                    .setLinearHeadingInterpolation(Math.toRadians(180 - 300), Math.toRadians(180))
+                    .setLinearHeadingInterpolation(Math.toRadians(300), Math.toRadians(0))
                     .build();
 
             toSecondShoot = follower.pathBuilder()
@@ -151,7 +149,7 @@ public class BlueClose15 extends RobotOpMode {
                             transformed(125, 58),
                             transformed(87, 83)
                     ))
-                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180 - 300))
+                    .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(300))
                     .build();
 
             toGateIntake = follower.pathBuilder()
@@ -160,7 +158,7 @@ public class BlueClose15 extends RobotOpMode {
                             transformed(110, 64),
                             transformed(120, 64.75)
                     ))
-                    .setLinearHeadingInterpolation(Math.toRadians(180 - 300), Math.toRadians(180))
+                    .setLinearHeadingInterpolation(Math.toRadians(300), Math.toRadians(0))
                     .build();
 
             awayFromGate = follower.pathBuilder()
@@ -169,7 +167,7 @@ public class BlueClose15 extends RobotOpMode {
                             transformed(120, 50),
                             transformed(126, 49)
                     ))
-                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180 - 36.5))
+                    .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(36.5))
                     .build();
 
             toThirdShoot = follower.pathBuilder()
@@ -178,7 +176,7 @@ public class BlueClose15 extends RobotOpMode {
                             transformed(96, 48),
                             transformed(87, 83)
                     ))
-                    .setLinearHeadingInterpolation(Math.toRadians(180 - 36.5), Math.toRadians(180))
+                    .setLinearHeadingInterpolation(Math.toRadians(36.5), Math.toRadians(0))
                     .build();
 
             firstRowIntake = follower.pathBuilder()
@@ -186,7 +184,7 @@ public class BlueClose15 extends RobotOpMode {
                             transformed(87, 83),
                             transformed(123, 83)
                     ))
-                    .setConstantHeadingInterpolation(Math.toRadians(180))
+                    .setConstantHeadingInterpolation(Math.toRadians(0))
                     .build();
 
             toFourthShoot = follower.pathBuilder()
@@ -194,7 +192,7 @@ public class BlueClose15 extends RobotOpMode {
                             transformed(123, 83),
                             transformed(87, 83)
                     ))
-                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180 - 300))
+                    .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(300))
                     .build();
 
             lastRowIntake = follower.pathBuilder()
