@@ -20,14 +20,14 @@ import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 @Config
 public class Drivetrain {
-    public static PIDFCoefficients headingCoefficients = new PIDFCoefficients(0, 0, 0, 0);
-    public static double gateOpenHeadingDegrees = 45;
+    public static PIDFCoefficients headingCoefficients = new PIDFCoefficients(1.75, 0, 0.09, 0);
+    public static double gateOpenHeadingDegrees = 36.5;
     private static Pose poseTransfer = new Pose();
     public final DcMotorEx frontLeft;
     public final DcMotorEx frontRight;
     public final DcMotorEx backLeft;
     public final DcMotorEx backRight;
-    private final Follower follower;
+    public final Follower follower;
     private final Telemetry telemetry;
     private final PIDFController headingController = new PIDFController(headingCoefficients);
     private boolean lockHeading = false;
@@ -54,13 +54,6 @@ public class Drivetrain {
 
     public static void localize(Pose pose) {
         poseTransfer = pose;
-    }
-
-    public void lockHeading() {
-        if (!lockHeading) {
-            lockHeading = true;
-            headingTargetRadians = follower.getHeading();
-        }
     }
 
     public void gateHeading(Alliance alliance) {
@@ -134,6 +127,8 @@ public class Drivetrain {
             telemetry.addData("Current X", follower.getPose().getX());
             telemetry.addData("Current Y", follower.getPose().getY());
             telemetry.addData("Current Heading", Math.toDegrees(follower.getHeading()));
+            telemetry.addData("Heading Locked", lockHeading);
+            telemetry.addData("Heading Target", headingTargetRadians);
         });
     }
 }

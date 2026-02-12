@@ -44,6 +44,7 @@ public class WaveLength {
 
     public static double getAngleWithInterpolation(Pose currentPosition, Alliance alliance) {
         Pose pose = alliance == Alliance.RED ? currentPosition : mirror(currentPosition);
-        return closeTurretInterpolationDegrees.interpolate(pose.getX(), pose.getY());
+        double angle =  closeTurretInterpolationDegrees.interpolate(pose.getX(), pose.getY());
+        return alliance == Alliance.RED ? angle : 180 - angle;
     }
 }

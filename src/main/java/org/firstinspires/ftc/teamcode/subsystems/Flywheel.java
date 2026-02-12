@@ -20,14 +20,11 @@ public class Flywheel {
     public static int velocityTolerance = 40;
     public static boolean override = false;
     public static double overrideTarget = 1000;
-
     private final DcMotorEx flywheelMotorTop;
     private final DcMotorEx flywheelMotorBottom;
-
     private final Telemetry telemetry;
-
     private final Drivetrain drivetrain;
-
+    private boolean tempOverride = false;
     private boolean on = false;
     private double target = 0;
 
@@ -38,6 +35,15 @@ public class Flywheel {
 
         telemetry = robot.telemetry;
         drivetrain = robot.drivetrain;
+    }
+
+    public void setTarget(double target) {
+        this.target = target;
+        tempOverride = true;
+    }
+
+    public void useInterpolation() {
+        tempOverride = false;
     }
 
     private void setPower(double power) {
@@ -70,7 +76,7 @@ public class Flywheel {
     public Command periodic() {
         return infinite(() -> {
             if (on) {
-                target = override ? overrideTarget : WaveLength.getVelocityWithInterpolation(TurretLocation.getTurretPose(drivetrain.getPose()), Alliance.current);
+                target = override ? overrideTarget : (tempOverride ? target : WaveLength.getVelocityWithInterpolation(TurretLocation.getTurretPose(drivetrain.getPose()), Alliance.current));
                 setPower(kP * (target - getVelocity()) + kV * target + kS * Math.signum(target));
             } else {
                 target = 0;

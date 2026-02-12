@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 @Config
 public class Blocker {
     public static double blockPosition = 0.17;
-    public static double unblockPosition = 0.34;
+    public static double unblockPosition = 0.28;
     public static double assemblyPosition = 0;
 
     private final Servo blockerServo;

@@ -19,7 +19,7 @@ ftc {
     }
 
     pedro {
-        implementation(ftc("2.1.0-SNAPSHOT"))
+        implementation(ftc("2.1.0-alpha.2"))
         implementation(telemetry)
     }
 }
