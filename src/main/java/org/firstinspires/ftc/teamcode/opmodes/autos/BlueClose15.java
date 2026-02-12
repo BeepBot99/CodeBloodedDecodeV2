@@ -42,6 +42,20 @@ public class BlueClose15 extends RobotOpMode {
         paths = new Paths(robot.drivetrain.follower);
     }
 
+    private Command aimForPose(Pose pose) {
+        return instant(() -> {
+            Pose turretLocation = TurretLocation.getTurretPose(pose);
+
+            robot.turret.setTargetDegrees(
+                    TractorBeam.getTurretTargetDegrees(turretLocation, robot.telemetry, Alliance.current)
+            );
+        });
+    }
+
+    private Command aimForPath(PathChain path) {
+        return aimForPose(path.endPose().withHeading(path.getFinalHeadingGoal()));
+    }
+
     @Override
     public void start() {
         robot.flywheel.setTarget(1340);
@@ -49,11 +63,13 @@ public class BlueClose15 extends RobotOpMode {
         schedule(
                 sequential(
                         instant(robot.flywheel::turnOn),
+                        aimForPath(paths.toFirstShoot),
                         robot.drivetrain.followPath(paths.toFirstShoot),
                         robot.intake.on(),
                         shoot(),
                         robot.drivetrain.followPath(paths.middleRowIntake),
                         robot.intake.off(),
+                        aimForPath(paths.toSecondShoot),
                         robot.drivetrain.followPath(paths.toSecondShoot),
                         robot.intake.on(),
                         shoot(),
@@ -64,6 +80,7 @@ public class BlueClose15 extends RobotOpMode {
                         instant(() -> robot.drivetrain.follower.setMaxPower(1)),
                         waitMs(1250),
                         robot.intake.off(),
+                        aimForPath(paths.toThirdShoot),
                         robot.drivetrain.followPath(paths.toThirdShoot),
                         robot.intake.on(),
                         shoot(),
@@ -71,12 +88,14 @@ public class BlueClose15 extends RobotOpMode {
                         robot.drivetrain.followPath(paths.firstRowIntake),
                         instant(() -> robot.drivetrain.follower.setMaxPower(1)),
                         robot.intake.off(),
+                        aimForPath(paths.toFourthShoot),
                         robot.drivetrain.followPath(paths.toFourthShoot),
                         robot.intake.on(),
                         shoot(),
                         robot.drivetrain.followPath(paths.lastRowIntake),
                         robot.intake.off(),
                         instant(() -> robot.flywheel.setTarget(1365)),
+                        aimForPath(paths.toFifthShoot),
                         robot.drivetrain.followPath(paths.toFifthShoot),
                         robot.intake.on(),
                         shoot(),
@@ -93,15 +112,6 @@ public class BlueClose15 extends RobotOpMode {
                 waitMs(1000),
                 instant(robot.blocker::block)
         );
-    }
-
-    @Override
-    public void loop() {
-        Pose turretPose = TurretLocation.getTurretPose(robot.drivetrain.getPose());
-
-        TractorBeam.aimTurret(turretPose, robot, Alliance.current);
-
-        super.loop();
     }
 
     private static class Paths {
@@ -158,11 +168,6 @@ public class BlueClose15 extends RobotOpMode {
                             transformed(126, 49)
                     ))
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180 - 36.5))
-//                    .addPath(new BezierLine(
-//                            transformed(126, 45),
-//                            transformed(126, 53)
-//                    ))
-//                    .setConstantHeadingInterpolation(Math.toRadians(36.5))
                     .build();
 
             toThirdShoot = follower.pathBuilder()
