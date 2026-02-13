@@ -115,7 +115,7 @@ public class BlueClose15SkipFar extends RobotOpMode {
     private Command shoot() {
         return sequential(
                 instant(robot.blocker::unblock),
-                waitMs(1000),
+                waitMs(1500),
                 instant(robot.blocker::block)
         );
     }
@@ -146,14 +146,14 @@ public class BlueClose15SkipFar extends RobotOpMode {
                     .addPath(new BezierCurve(
                             transformed(87, 83),
                             transformed(90, 58),
-                            transformed(125, 58)
+                            transformed(128, 58)
                     ))
                     .setLinearHeadingInterpolation(Math.toRadians(180 - 300), Math.toRadians(180))
                     .build();
 
             toSecondShoot = follower.pathBuilder()
                     .addPath(new BezierLine(
-                            transformed(125, 58),
+                            transformed(128, 58),
                             transformed(87, 83)
                     ))
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180 - 300))
@@ -162,24 +162,24 @@ public class BlueClose15SkipFar extends RobotOpMode {
             toGateIntake1 = follower.pathBuilder()
                     .addPath(new BezierCurve(
                             transformed(87, 83),
-                            transformed(110, 64),
-                            transformed(120, 64.75)
+                            transformed(113, 64),
+                            transformed(123, 64.75)
                     ))
                     .setLinearHeadingInterpolation(Math.toRadians(180 - 300), Math.toRadians(180))
                     .build();
 
             awayFromGate1 = follower.pathBuilder()
                     .addPath(new BezierCurve(
-                            transformed(120, 64.75),
-                            transformed(120, 50),
-                            transformed(126, 49)
+                            transformed(123, 64.75),
+                            transformed(123, 50),
+                            transformed(129, 49)
                     ))
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180 - 36.5))
                     .build();
 
             toThirdShoot = follower.pathBuilder()
                     .addPath(new BezierCurve(
-                            transformed(126, 49),
+                            transformed(129, 49),
                             transformed(96, 48),
                             transformed(87, 83)
                     ))
@@ -189,24 +189,24 @@ public class BlueClose15SkipFar extends RobotOpMode {
             toGateIntake2 = follower.pathBuilder()
                     .addPath(new BezierCurve(
                             transformed(87, 83),
-                            transformed(110, 64),
-                            transformed(120, 64.75)
+                            transformed(113, 64),
+                            transformed(123, 64.75)
                     ))
                     .setLinearHeadingInterpolation(Math.toRadians(180 - 300), Math.toRadians(180))
                     .build();
 
             awayFromGate2 = follower.pathBuilder()
                     .addPath(new BezierCurve(
-                            transformed(120, 64.75),
-                            transformed(120, 50),
-                            transformed(126, 49)
+                            transformed(123, 64.75),
+                            transformed(123, 50),
+                            transformed(129, 49)
                     ))
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180 - 36.5))
                     .build();
 
             toFourthShoot = follower.pathBuilder()
                     .addPath(new BezierCurve(
-                            transformed(126, 49),
+                            transformed(129, 49),
                             transformed(96, 48),
                             transformed(87, 83)
                     ))
@@ -216,14 +216,14 @@ public class BlueClose15SkipFar extends RobotOpMode {
             firstRowIntake = follower.pathBuilder()
                     .addPath(new BezierLine(
                             transformed(87, 83),
-                            transformed(123, 83)
+                            transformed(126, 83)
                     ))
                     .setConstantHeadingInterpolation(Math.toRadians(180))
                     .build();
 
             toFifthShoot = follower.pathBuilder()
                     .addPath(new BezierLine(
-                            transformed(123, 83),
+                            transformed(126, 83),
                             transformed(84, 103)
                     ))
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180 - 300))
