@@ -5,8 +5,8 @@ import com.pedropathing.geometry.Pose;
 import static org.firstinspires.ftc.teamcode.math.PoseMirror.mirror;
 
 public enum Alliance {
-    RED(new Pose(141, 141)),
-    BLUE(mirror(new Pose(141, 141)));
+    RED(new Pose(138, 138)),
+    BLUE(mirror(new Pose(138, 138)));
 
     public static Alliance current = Alliance.RED;
     public final Pose goal;

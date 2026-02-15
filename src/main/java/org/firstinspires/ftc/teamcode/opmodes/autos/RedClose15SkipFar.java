@@ -148,15 +148,15 @@ public class RedClose15SkipFar extends RobotOpMode {
             middleRowIntake = follower.pathBuilder()
                     .addPath(new BezierCurve(
                             transformed(87, 83),
-                            transformed(87, 57),
-                            transformed(127, 57)
+                            transformed(87, 58),
+                            transformed(127, 58)
                     ))
                     .setLinearHeadingInterpolation(Math.toRadians(300), Math.toRadians(0))
                     .build();
 
             toSecondShoot = follower.pathBuilder()
                     .addPath(new BezierCurve(
-                            transformed(126.5, 57),
+                            transformed(126.5, 58),
                             transformed(100,68),
                             transformed(87, 85)
                     ))
@@ -184,14 +184,14 @@ public class RedClose15SkipFar extends RobotOpMode {
             creepGate = follower.pathBuilder()
                     .addPath(new BezierLine(
                             transformed(126,49),
-                            transformed(126,56)
+                            transformed(126,57)
                     ))
                     .setLinearHeadingInterpolation(Math.toRadians(36.5), Math.toRadians(36.5))
                     .build();
 
             toThirdShoot = follower.pathBuilder()
                     .addPath(new BezierCurve(
-                            transformed(126, 49),
+                            transformed(126, 57),
                             transformed(96, 48),
                             transformed(87, 83)
                     ))
@@ -218,17 +218,17 @@ public class RedClose15SkipFar extends RobotOpMode {
 
             toFourthShoot = follower.pathBuilder()
                     .addPath(new BezierCurve(
-                            transformed(126, 49),
+                            transformed(126, 57),
                             transformed(96, 48),
-                            transformed(87, 83)
+                            transformed(87, 84)
                     ))
                     .setLinearHeadingInterpolation(Math.toRadians(36.5), Math.toRadians(0))
                     .build();
 
             firstRowIntake = follower.pathBuilder()
                     .addPath(new BezierLine(
-                            transformed(87, 83),
-                            transformed(122, 83)
+                            transformed(87, 84),
+                            transformed(122, 84)
                     ))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
                     .build();
@@ -236,7 +236,7 @@ public class RedClose15SkipFar extends RobotOpMode {
             toFifthShoot = follower.pathBuilder()
                     .addPath(new BezierLine(
                             transformed(123, 83),
-                            transformed(83, 98.5)
+                            transformed(84, 103)
                     ))
                     .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(300))
                     .build();

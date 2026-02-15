@@ -9,8 +9,8 @@ public class TurretLocation {
 
     public static Pose getTurretPose(Pose robotPose) {
         return new Pose(
-                robotPose.getX() + turretOffsetInches * Math.cos(robotPose.getHeading()),
-                robotPose.getY() + turretOffsetInches * Math.sin(robotPose.getHeading()),
+                robotPose.getX() - turretOffsetInches * Math.cos(robotPose.getHeading()),
+                robotPose.getY() - turretOffsetInches * Math.sin(robotPose.getHeading()),
                 robotPose.getHeading()
         );
     }

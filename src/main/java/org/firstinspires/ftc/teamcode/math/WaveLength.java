@@ -12,7 +12,7 @@ public class WaveLength {
             new double[]{43, 71, 100},
             new double[]{6, 27},
             new double[][]{
-                    {1700, 1635},
+                    {1675, 1640},
                     {1675, 1520},
                     {1620, 1520}
             });
@@ -21,16 +21,16 @@ public class WaveLength {
             new double[]{43, 71, 100},
             new double[]{6, 27},
             new double[][]{
-                    {45, 48},
-                    {62, 58},
-                    {76, 72}
+                    {55.2, 54},
+                    {61, 58},
+                    {79, 75}
             });
 
     private static final Interpolation2D closeInterpolation = new BilinearInterpolation(
             new double[]{38, 61, 85},
             new double[]{135.5, 111, 88, 63},
             new double[][]{
-                    {1440, 1450, 1470, 1520},
+                    {1400, 1430, 1470, 1520},
                     {1375, 1380, 1390, 1415},
                     {1338, 1325, 1330, 1350},
             }
@@ -40,9 +40,9 @@ public class WaveLength {
             new double[]{38, 61, 85},
             new double[]{135.5, 111, 88, 63},
             new double[][]{
-                    {0, 2.8, 27.5, 37.5},
+                    {1.3, 2.8, 27.5, 37.5},
                     {3, 16.5, 32, 45},
-                    {4.5, 26, 39, 56},
+                    {5.5, 28, 41, 56},
             }
     );
 

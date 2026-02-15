@@ -22,18 +22,22 @@ public class TractorBeam {
 
         double turretTargetDegrees = AngleUnit.normalizeDegrees(targetAngleDegrees - Math.toDegrees(currentPose.getHeading()));
 
+//        double targetAngleRadians = Math.atan2(alliance.goal.getY() - currentPose.getY(), alliance.goal.getX() - currentPose.getX());
+//
+//        double turretTargetRadians = AngleUnit.normalizeRadians(targetAngleRadians - currentPose.getHeading());
+//
+//        double turretTargetDegrees = Math.toDegrees(turretTargetRadians);
+
+
         if (turretTargetDegrees < minimumAngleDegrees) {
             turretTargetDegrees += 360;
         }
 
         telemetry.addData("Auto Aim Target", targetAngleDegrees);
+//        telemetry.addData("Auto Aim Target", Math.toDegrees(targetAngleRadians));
         telemetry.addData("Auto Aim Turret Target", turretTargetDegrees);
 
 
         return turretTargetDegrees;
-    }
-
-    public static void normalize(double angle) {
-
     }
 }
